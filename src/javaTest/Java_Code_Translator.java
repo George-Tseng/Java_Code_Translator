@@ -16,7 +16,6 @@ public class Java_Code_Translator {
 		Scanner inputScan = new Scanner(System.in);
 		String inputFileRoute, outputFileRoute, modeCover, modeCovert;
 		File inputFile, outputFile;
-		int countTmp;
 		boolean keepRun1 = false, keepRun2 = false, keepRun3 = false, keepRun4 = false, keepRun5 = false;
 		
 		System.out.println("在開始操作前，請先確認檔案所使用的編碼\n如不確定檔案編碼，建議在接下來的流程中不要選擇任何涉及到檔案覆蓋的選項\n");
@@ -117,7 +116,7 @@ public class Java_Code_Translator {
 		/*Part 5 決定轉換模式*/
 		do {
 			System.out.println("請選擇輸入下列整數以選擇轉換模式：");
-			System.out.println("1. MS950 轉成 UTF-8\\n2. UTF-8 轉成 MS950\\n3. UTF-8 轉成 MS950 (使用 4 位元進行轉換)");
+			System.out.println("1. MS950 轉成 UTF-8\n2. UTF-8 轉成 MS950\n3. UTF-8 轉成 MS950 (使用 4 位元進行轉換)");
 			System.out.println("4. GBK 轉成 UTF-8\n2. UTF-8 轉成 GBK\n6. UTF-8 轉成 GBK (使用 4 位元進行轉換)):");
 			System.out.println("7. MS950 轉成 GBK\n8. GBK 轉成 MS950\n(預設為 1):");
 			modeCovert = inputScan.nextLine();
@@ -125,19 +124,13 @@ public class Java_Code_Translator {
 			if(modeCovert.equals("") == true || modeCovert.equals("1") == true) {
 				keepRun5 = false;
 			}
-			else if(modeCovert.equals("2") == true) {
-				keepRun5 = false;
-			}
-			else if(modeCovert.equals("3") == true) {
+			else if(modeCovert.equals("2") == true || modeCovert.equals("3") == true) {
 				keepRun5 = false;
 			}
 			else if(modeCovert.equals("4") == true) {
 				keepRun5 = false;
 			}
-			else if(modeCovert.equals("5") == true) {
-				keepRun5 = false;
-			}
-			else if(modeCovert.equals("6") == true) {
+			else if(modeCovert.equals("5") == true || modeCovert.equals("6") == true) {
 				keepRun5 = false;
 			}
 			else if(modeCovert.equals("7") == true) {
@@ -155,195 +148,93 @@ public class Java_Code_Translator {
 		
 		/*Part 6 開始轉換*/
 		if(modeCovert.equals("") == true || modeCovert.equals("1") == true) {
-			try (
-				/*讀取*/
-				InputStreamReader isr0 = new InputStreamReader(new FileInputStream(inputFile), "MS950");
-				/*寫入*/
-				OutputStreamWriter osw0 = new OutputStreamWriter(new FileOutputStream(outputFile), "UTF-8");
-			){
-				/*Big-5/MS950 2 bit*/
-	            char [] charSpace = new char[2];
-	            while((countTmp = isr0.read(charSpace)) != -1){
-	                osw0.write(charSpace, 0, countTmp);
-	            }
-	            System.out.println("轉換工作已完成，檔案路徑為："+outputFileRoute);
-	            
-	            isr0.close();
-	            osw0.flush();
-	            osw0.close();
-			}
-			catch(UnsupportedEncodingException excep0) {
-				excep0.printStackTrace();
-			}
-			catch(FileNotFoundException excep1) {
-				excep1.printStackTrace();
-			}
-			catch(IOException excep2) {
-				excep2.printStackTrace();
-			}
+			charsetTranslate(inputFile, outputFile, "MS950", "UTF-8", 1);
 		}
-		else if(modeCovert.equals("2") == true || modeCovert.equals("3") == true) {
-			try (
-				/*讀取*/
-				InputStreamReader isr0 = new InputStreamReader(new FileInputStream(inputFile), "UTF-8");
-				/*寫入*/
-				OutputStreamWriter osw0 = new OutputStreamWriter(new FileOutputStream(outputFile), "MS950");
-			){
-				if(modeCovert.equals("2") == true) {
-					/*UTF-8 3 bit*/
-		            char [] charSpace = new char[3];
-		            while((countTmp = isr0.read(charSpace)) != -1){
-		                osw0.write(charSpace, 0, countTmp);
-		            }
-				}
-				else {
-					/*UTF-8 4 bit*/
-		            char [] charSpace = new char[4];
-		            while((countTmp = isr0.read(charSpace)) != -1){
-		                osw0.write(charSpace, 0, countTmp);
-		            }
-				}
-				System.out.println("轉換工作已完成，檔案路徑為："+outputFileRoute);
-	            
-	            isr0.close();
-	            osw0.flush();
-	            osw0.close();
-			}
-			catch(UnsupportedEncodingException excep0) {
-				excep0.printStackTrace();
-			}
-			catch(FileNotFoundException excep1) {
-				excep1.printStackTrace();
-			}
-			catch(IOException excep2) {
-				excep2.printStackTrace();
-			}
+		else if(modeCovert.equals("2") == true) {
+			charsetTranslate(inputFile, outputFile, "UTF-8", "MS950", 2);
+		}
+		else if(modeCovert.equals("3") == true) {
+			charsetTranslate(inputFile, outputFile, "UTF-8", "MS950", 3);
 		}
 		else if(modeCovert.equals("4") == true) {
-			try (
-				/*讀取*/
-				InputStreamReader isr0 = new InputStreamReader(new FileInputStream(inputFile), "GBK");
-				/*寫入*/
-				OutputStreamWriter osw0 = new OutputStreamWriter(new FileOutputStream(outputFile), "UTF-8");
-			){
-				/*GBK 2 bit*/
-	            char [] charSpace = new char[2];
-	            while((countTmp = isr0.read(charSpace)) != -1){
-	                osw0.write(charSpace, 0, countTmp);
-	            }
-	            System.out.println("轉換工作已完成，檔案路徑為："+outputFileRoute);
-	            
-	            isr0.close();
-	            osw0.flush();
-	            osw0.close();
-			}
-			catch(UnsupportedEncodingException excep0) {
-				excep0.printStackTrace();
-			}
-			catch(FileNotFoundException excep1) {
-				excep1.printStackTrace();
-			}
-			catch(IOException excep2) {
-				excep2.printStackTrace();
-			}
+			charsetTranslate(inputFile, outputFile, "GBK", "UTF-8", 4);
 		}
-		else if(modeCovert.equals("5") == true || modeCovert.equals("6") == true) {
-			try (
-				/*讀取*/
-				InputStreamReader isr0 = new InputStreamReader(new FileInputStream(inputFile), "UTF-8");
-				/*寫入*/
-				OutputStreamWriter osw0 = new OutputStreamWriter(new FileOutputStream(outputFile), "GBK");
-			){
-				if(modeCovert.equals("2") == true) {
-					/*UTF-8 3 bit*/
-		            char [] charSpace = new char[3];
-		            while((countTmp = isr0.read(charSpace)) != -1){
-		                osw0.write(charSpace, 0, countTmp);
-		            }
-				}
-				else {
-					/*UTF-8 4 bit*/
-		            char [] charSpace = new char[4];
-		            while((countTmp = isr0.read(charSpace)) != -1){
-		                osw0.write(charSpace, 0, countTmp);
-		            }
-				}
-				System.out.println("轉換工作已完成，檔案路徑為："+outputFileRoute);
-	            
-	            isr0.close();
-	            osw0.flush();
-	            osw0.close();
-			}
-			catch(UnsupportedEncodingException excep0) {
-				excep0.printStackTrace();
-			}
-			catch(FileNotFoundException excep1) {
-				excep1.printStackTrace();
-			}
-			catch(IOException excep2) {
-				excep2.printStackTrace();
-			}
+		else if(modeCovert.equals("5") == true) {
+			charsetTranslate(inputFile, outputFile, "UTF-8", "GBK", 5);
+		}
+		else if(modeCovert.equals("6") == true) {
+			charsetTranslate(inputFile, outputFile, "UTF-8", "GBK", 6);
 		}
 		else if(modeCovert.equals("7") == true) {
-			try (
-				/*讀取*/
-				InputStreamReader isr0 = new InputStreamReader(new FileInputStream(inputFile), "MS950");
-				/*寫入*/
-				OutputStreamWriter osw0 = new OutputStreamWriter(new FileOutputStream(outputFile), "GBK");
-			){
-				/*MS950 2 bit*/
-	            char [] charSpace = new char[2];
-	            while((countTmp = isr0.read(charSpace)) != -1){
-	                osw0.write(charSpace, 0, countTmp);
-	            }
-				System.out.println("轉換工作已完成，檔案路徑為："+outputFileRoute);
-	            
-	            isr0.close();
-	            osw0.flush();
-	            osw0.close();
-			}
-			catch(UnsupportedEncodingException excep0) {
-				excep0.printStackTrace();
-			}
-			catch(FileNotFoundException excep1) {
-				excep1.printStackTrace();
-			}
-			catch(IOException excep2) {
-				excep2.printStackTrace();
-			}
+			charsetTranslate(inputFile, outputFile, "MS950", "GBK", 7);
 		}
-		else if(modeCovert.equals("7") == true) {
-			try (
-				/*讀取*/
-				InputStreamReader isr0 = new InputStreamReader(new FileInputStream(inputFile), "GBK");
-				/*寫入*/
-				OutputStreamWriter osw0 = new OutputStreamWriter(new FileOutputStream(outputFile), "MS950");
-			){
-				/*GBK 2 bit*/
-	            char [] charSpace = new char[2];
-	            while((countTmp = isr0.read(charSpace)) != -1){
-	                osw0.write(charSpace, 0, countTmp);
-	            }
-				System.out.println("轉換工作已完成，檔案路徑為："+outputFileRoute);
-	            
-	            isr0.close();
-	            osw0.flush();
-	            osw0.close();
-			}
-			catch(UnsupportedEncodingException excep0) {
-				excep0.printStackTrace();
-			}
-			catch(FileNotFoundException excep1) {
-				excep1.printStackTrace();
-			}
-			catch(IOException excep2) {
-				excep2.printStackTrace();
-			}
+		else if(modeCovert.equals("8") == true) {
+			charsetTranslate(inputFile, outputFile, "GBK", "MS950", 8);
 		}
 		else {
 			System.out.println("發生未知的錯誤！請重新執行！");
 		}
 		
 		inputScan.close();
+	}
+	
+	static void charsetTranslate(File inputF, File outputF, String inputChar, String outputChar, int mode){
+		try (
+				/*讀取*/
+				InputStreamReader isr0 = new InputStreamReader(new FileInputStream(inputF), inputChar);
+				/*寫入*/
+				OutputStreamWriter osw0 = new OutputStreamWriter(new FileOutputStream(outputF), outputChar);
+			){
+				int count;
+				char [] charSpace;
+				switch(mode) {
+					case 1:
+					case 7:
+						/*MS950 2 bit*/
+			            charSpace = new char[2];
+			            while((count = isr0.read(charSpace)) != -1){
+			                osw0.write(charSpace, 0, count);
+			            }
+			            break;
+					case 2:
+					case 5:
+						/*UTF-8 3 bit*/
+			            charSpace = new char[3];
+			            while((count = isr0.read(charSpace)) != -1){
+			                osw0.write(charSpace, 0, count);
+			            }
+			            break;
+					case 3:
+					case 6:
+						/*UTF-8 4 bit*/
+			            charSpace = new char[4];
+			            while((count = isr0.read(charSpace)) != -1){
+			                osw0.write(charSpace, 0, count);
+			            }
+			            break;
+					case 4:
+					case 8:
+						/*GBK 2 bit*/
+			            charSpace = new char[2];
+			            while((count = isr0.read(charSpace)) != -1){
+			                osw0.write(charSpace, 0, count);
+			            }
+			            break;
+				}
+				System.out.println("轉換工作已完成，檔案路徑為："+outputF);
+	            
+	            isr0.close();
+	            osw0.flush();
+	            osw0.close();
+			}
+			catch(UnsupportedEncodingException excep0) {
+				excep0.printStackTrace();
+			}
+			catch(FileNotFoundException excep1) {
+				excep1.printStackTrace();
+			}
+			catch(IOException excep2) {
+				excep2.printStackTrace();
+			}
 	}
 }
